@@ -5,6 +5,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Button } from './ui/button';
 import { Loader2 } from 'lucide-react';
+import { formatPhoneNumber } from '../services/formatters';
 
 interface CalculatorFormProps {
   onCalculate: (data: FormData) => void;
@@ -26,10 +27,19 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({ onCalculate, isL
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value, type } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'number' ? parseFloat(value) || 0 : value,
-    }));
+
+    if (name === 'whatsappNumber') {
+        const formattedValue = formatPhoneNumber(value);
+        setFormData(prev => ({
+            ...prev,
+            [name]: formattedValue,
+        }));
+    } else {
+        setFormData(prev => ({
+            ...prev,
+            [name]: type === 'number' ? parseFloat(value) || 0 : value,
+        }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent): void => {
