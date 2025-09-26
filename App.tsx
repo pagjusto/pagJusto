@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { CalculatorForm } from './components/CalculatorForm';
 import { ResultsDisplay } from './components/ResultsDisplay';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-// FIX: Import the 'Card' component.
-import { Card } from './components/Card';
+import { Card, CardContent } from './components/ui/card';
+import { AlertCircle } from 'lucide-react';
 import type { FormData, CalculationResult } from './types';
 import { calculateMonthlyRate, calculateMonthlyPayment } from './services/financial';
 import { getMarketRate } from './services/interestRateData';
@@ -147,16 +146,16 @@ export default function App(): React.ReactElement {
           </div>
           <div className="lg:col-span-3">
              {error && (
-              <Card className="mb-6 border-2 border-red-300 bg-red-50">
-                <div className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-danger mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <div>
-                        <strong className="font-bold text-danger">Erro ao calcular:</strong>
-                        <p className="text-sm text-gray-700">{error}</p>
+              <Card className="mb-6 border-danger bg-red-50 text-danger">
+                <CardContent className="p-4">
+                    <div className="flex items-center">
+                        <AlertCircle className="h-6 w-6 mr-3" />
+                        <div>
+                            <strong className="font-bold">Erro ao calcular:</strong>
+                            <p className="text-sm">{error}</p>
+                        </div>
                     </div>
-                </div>
+                </CardContent>
               </Card>
             )}
             <ResultsDisplay result={result} isLoading={isLoading} onSendToWhatsApp={handleSendToWhatsApp} />
