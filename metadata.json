@@ -1,0 +1,5 @@
+{
+  "name": "Calculadora de Juros Abusivos",
+  "description": "Uma aplicação web para ajudar usuários a identificar se a taxa de juros do seu financiamento de veículo é potencialmente abusiva, comparando-a com a taxa média de mercado divulgada pelo Banco Central do Brasil.",
+  "requestFramePermissions": []
+}
