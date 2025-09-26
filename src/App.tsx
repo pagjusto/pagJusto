@@ -3,6 +3,7 @@ import { CalculatorForm } from './components/CalculatorForm';
 import { ResultsDisplay } from './components/ResultsDisplay';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { IntroSection } from './components/IntroSection';
 import { Card, CardContent } from './components/ui/card';
 import { AlertCircle } from 'lucide-react';
 import type { FormData, CalculationResult } from './types';
@@ -140,7 +141,8 @@ export default function App(): React.ReactElement {
     <div className="min-h-screen flex flex-col items-center text-brand-black">
       <main className="w-full max-w-5xl mx-auto p-4 sm:p-6 md:p-8">
         <Header />
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mt-8">
+        <IntroSection />
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           <div className="lg:col-span-2">
             <CalculatorForm onCalculate={handleCalculate} isLoading={isLoading} />
           </div>
