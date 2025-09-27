@@ -1,5 +1,4 @@
 import React from 'react';
-import { logoBase64 } from '@/assets/logo';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
@@ -23,7 +22,7 @@ export const Header: React.FC = () => {
                 </Button>
             </div>
             <img 
-                src={logoBase64} 
+                src="/logo.png" 
                 alt="Pag Justo! Logo" 
                 className="w-48 sm:w-56 mx-auto mb-6"
                 aria-label="Pag Justo! Calculadora de Juros"

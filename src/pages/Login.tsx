@@ -2,13 +2,12 @@ import React from 'react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase } from '@/integrations/supabase/client';
-import { logoBase64 } from '@/assets/logo';
 
 const Login: React.FC = () => {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-brand-green p-4">
             <img 
-                src={logoBase64} 
+                src="/logo.png" 
                 alt="Pag Justo! Logo" 
                 className="w-48 sm:w-56 mx-auto mb-8"
             />
