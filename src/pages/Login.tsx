@@ -25,7 +25,7 @@ const Login: React.FC = () => {
                     supabaseClient={supabase}
                     appearance={{ theme: ThemeSupa }}
                     providers={[]}
-                    theme="light"
+                    theme="dark"
                     localization={{
                         variables: {
                             sign_in: {
