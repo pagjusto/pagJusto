@@ -1,12 +1,17 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { calculatorSchema, type CalculatorFormData } from '../services/validation';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from './ui/card';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Button } from './ui/button';
-import { Loader2, User, Phone, Calendar, DollarSign, Hash } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Calendar } from './ui/calendar';
+import { cn } from '@/lib/utils';
+import { Loader2, User, Phone, Calendar as CalendarIcon, DollarSign, Hash } from 'lucide-react';
 import { formatPhoneNumber } from '../services/formatters';
 
 interface CalculatorFormProps {
@@ -26,6 +31,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({ onCalculate, isL
         formState: { errors },
         watch,
         setValue,
+        control,
     } = useForm<CalculatorFormData>({
         resolver: zodResolver(calculatorSchema),
         defaultValues: {
@@ -80,8 +86,37 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({ onCalculate, isL
                         <legend className="text-sm font-semibold text-gray-500 uppercase tracking-wider border-b pb-2 w-full">Detalhes do Financiamento</legend>
                         
                         <div className="space-y-1">
-                            <Label htmlFor="financingDate" className="flex items-center"><Calendar className="h-4 w-4 mr-2 text-gray-400" />Data do Financiamento</Label>
-                            <Input id="financingDate" type="date" {...register('financingDate')} className="[color-scheme:light]" />
+                            <Label htmlFor="financingDate" className="flex items-center"><CalendarIcon className="h-4 w-4 mr-2 text-gray-400" />Data do Financiamento</Label>
+                            <Controller
+                                name="financingDate"
+                                control={control}
+                                render={({ field }) => (
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant={"outline"}
+                                                className={cn(
+                                                    "w-full justify-start text-left font-normal",
+                                                    !field.value && "text-muted-foreground"
+                                                )}
+                                            >
+                                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                                {field.value ? format(new Date(field.value), "PPP", { locale: ptBR }) : <span>Selecione uma data</span>}
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0">
+                                            <Calendar
+                                                mode="single"
+                                                selected={field.value ? new Date(field.value) : undefined}
+                                                onSelect={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
+                                                initialFocus
+                                                locale={ptBR}
+                                                disabled={(date) => date > new Date() || date < new Date("2019-01-01")}
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                )}
+                            />
                             <FormError message={errors.financingDate?.message} />
                         </div>
                         
