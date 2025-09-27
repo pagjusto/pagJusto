@@ -1,7 +1,7 @@
 import React from 'react';
-import { logoBase64 } from '../assets/logo';
-import { supabase } from '../integrations/supabase/client';
-import { Button } from './ui/button';
+import { logoBase64 } from '@/assets/logo';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
 
 export const Header: React.FC = () => {

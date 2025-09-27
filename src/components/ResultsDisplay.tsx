@@ -1,9 +1,9 @@
 import React from 'react';
-import type { CalculationResult } from '../types';
-import type { CalculatorFormData } from '../services/validation';
-import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
-import { Button } from './ui/button';
-import { formatCurrency, formatPercentage } from '../services/formatters';
+import type { CalculationResult } from '@/types';
+import type { CalculatorFormData } from '@/services/validation';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { formatCurrency, formatPercentage } from '@/services/formatters';
 import { Loader2, FileText, MessageSquareWarning, BadgeCheck, BotMessageSquare } from 'lucide-react';
 
 interface ResultsDisplayProps {

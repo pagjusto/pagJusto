@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { CalculatorForm } from '../components/CalculatorForm';
-import { ResultsDisplay } from '../components/ResultsDisplay';
-import { Header } from '../components/Header';
-import { Footer } from '../components/Footer';
-import { IntroSection } from '../components/IntroSection';
-import { Card, CardContent } from '../components/ui/card';
+import { CalculatorForm } from '@/components/CalculatorForm';
+import { ResultsDisplay } from '@/components/ResultsDisplay';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { IntroSection } from '@/components/IntroSection';
+import { Card, CardContent } from '@/components/ui/card';
 import { AlertCircle } from 'lucide-react';
-import type { CalculationResult } from '../types';
-import type { CalculatorFormData } from '../services/validation';
-import { calculateMonthlyRate, calculateMonthlyPayment } from '../services/financial';
-import { getMarketRate } from '../services/interestRateData';
+import type { CalculationResult } from '@/types';
+import type { CalculatorFormData } from '@/services/validation';
+import { calculateMonthlyRate, calculateMonthlyPayment } from '@/services/financial';
+import { getMarketRate } from '@/services/interestRateData';
 
 export default function Home(): React.ReactElement {
   const [result, setResult] = useState<CalculationResult | null>(null);

@@ -1,14 +1,14 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { calculatorSchema, type CalculatorFormData } from '../services/validation';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from './ui/card';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Button } from './ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { calculatorSchema, type CalculatorFormData } from '@/services/validation';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, User, Phone, Calendar as CalendarIcon, DollarSign, Hash } from 'lucide-react';
-import { formatPhoneNumber } from '../services/formatters';
+import { formatPhoneNumber } from '@/services/formatters';
 
 interface CalculatorFormProps {
   onCalculate: (data: CalculatorFormData) => void;

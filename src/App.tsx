@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { supabase } from './integrations/supabase/client';
-import Home from './pages/Home';
-import Login from './pages/Login';
+import { supabase } from '@/integrations/supabase/client';
+import Home from '@/pages/Home';
+import Login from '@/pages/Login';
 import type { Session } from '@supabase/supabase-js';
 
 const App: React.FC = () => {
