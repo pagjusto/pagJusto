@@ -81,7 +81,7 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({ onCalculate, isL
                         
                         <div className="space-y-1">
                             <Label htmlFor="financingDate" className="flex items-center"><Calendar className="h-4 w-4 mr-2 text-gray-400" />Data do Financiamento</Label>
-                            <Input id="financingDate" type="date" {...register('financingDate')} />
+                            <Input id="financingDate" type="date" {...register('financingDate')} className="[color-scheme:light]" />
                             <FormError message={errors.financingDate?.message} />
                         </div>
                         
