@@ -27,8 +27,9 @@ export default function App(): React.ReactElement {
     // Using setTimeout to simulate an async calculation and show loading state
     setTimeout(() => {
       try {
-        const { financingDate, financedAmount, downPayment, installmentAmount, installments } = data;
+        const { financingMonth, financingYear, financedAmount, downPayment, installmentAmount, installments } = data;
 
+        const financingDate = `${financingYear}-${financingMonth}`;
         const principal = financedAmount - downPayment;
         
         if (installmentAmount * installments <= principal) {

@@ -1,16 +1,12 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 import { calculatorSchema, type CalculatorFormData } from '../services/validation';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from './ui/card';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Button } from './ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Calendar } from './ui/calendar';
-import { cn } from '@/lib/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Loader2, User, Phone, Calendar as CalendarIcon, DollarSign, Hash } from 'lucide-react';
 import { formatPhoneNumber } from '../services/formatters';
 
@@ -37,7 +33,8 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({ onCalculate, isL
         defaultValues: {
             fullName: '',
             whatsappNumber: '',
-            financingDate: '',
+            financingMonth: '',
+            financingYear: '',
             financedAmount: undefined,
             downPayment: 0,
             installmentAmount: undefined,
@@ -56,6 +53,17 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({ onCalculate, isL
     const onSubmit = (data: CalculatorFormData) => {
         onCalculate(data);
     };
+
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: currentYear - 2019 + 1 }, (_, i) => String(currentYear - i));
+    const months = [
+        { value: '01', label: 'Janeiro' }, { value: '02', label: 'Fevereiro' },
+        { value: '03', label: 'Março' }, { value: '04', label: 'Abril' },
+        { value: '05', label: 'Maio' }, { value: '06', label: 'Junho' },
+        { value: '07', label: 'Julho' }, { value: '08', label: 'Agosto' },
+        { value: '09', label: 'Setembro' }, { value: '10', label: 'Outubro' },
+        { value: '11', label: 'Novembro' }, { value: '12', label: 'Dezembro' },
+    ];
 
     return (
         <Card>
@@ -86,41 +94,42 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({ onCalculate, isL
                         <legend className="text-sm font-semibold text-gray-500 uppercase tracking-wider border-b pb-2 w-full">Detalhes do Financiamento</legend>
                         
                         <div className="space-y-1">
-                            <Label htmlFor="financingDate" className="flex items-center"><CalendarIcon className="h-4 w-4 mr-2 text-gray-400" />Data do Financiamento</Label>
-                            <Controller
-                                name="financingDate"
-                                control={control}
-                                render={({ field }) => (
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <Button
-                                                variant={"outline"}
-                                                className={cn(
-                                                    "w-full justify-start text-left font-normal",
-                                                    !field.value && "text-muted-foreground"
-                                                )}
-                                            >
-                                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                                {field.value ? format(new Date(field.value), "PPP", { locale: ptBR }) : <span>Selecione uma data</span>}
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-auto p-0">
-                                            <Calendar
-                                                mode="single"
-                                                captionLayout="dropdown-buttons"
-                                                fromYear={2019}
-                                                toYear={new Date().getFullYear()}
-                                                selected={field.value ? new Date(field.value) : undefined}
-                                                onSelect={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
-                                                initialFocus
-                                                locale={ptBR}
-                                                disabled={(date) => date > new Date() || date < new Date("2019-01-01")}
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
-                                )}
-                            />
-                            <FormError message={errors.financingDate?.message} />
+                            <Label className="flex items-center"><CalendarIcon className="h-4 w-4 mr-2 text-gray-400" />Data do Financiamento</Label>
+                            <div className="grid grid-cols-2 gap-4">
+                                <Controller
+                                    name="financingMonth"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Mês" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {months.map(month => (
+                                                    <SelectItem key={month.value} value={month.value}>{month.label}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    )}
+                                />
+                                <Controller
+                                    name="financingYear"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Ano" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {years.map(year => (
+                                                    <SelectItem key={year} value={year}>{year}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    )}
+                                />
+                            </div>
+                            <FormError message={errors.financingMonth?.message || errors.financingYear?.message} />
                         </div>
                         
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -12,7 +12,9 @@ export const calculatorSchema = z.object({
     whatsappNumber: z.string()
         .min(14, { message: "O número de WhatsApp parece curto demais." })
         .refine(val => val.replace(/\D/g, '').length >= 10, { message: "Número de WhatsApp inválido. Inclua o DDD." }),
-    financingDate: z.string().min(1, { message: "A data do financiamento é obrigatória." }),
+    
+    financingMonth: z.string({ required_error: "O mês do financiamento é obrigatório." }).min(1, { message: "O mês é obrigatório." }),
+    financingYear: z.string({ required_error: "O ano do financiamento é obrigatório." }).min(4, { message: "O ano é obrigatório." }),
     
     financedAmount: stringToNumber
         .pipe(z.number({ required_error: "Valor é obrigatório.", invalid_type_error: "Valor inválido." }).min(1, { message: "O valor deve ser maior que zero." })),
