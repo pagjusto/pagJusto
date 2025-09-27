@@ -1,5 +1,6 @@
 import React from 'react';
 import type { CalculationResult } from '../types';
+import type { CalculatorFormData } from '../services/validation';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { formatCurrency, formatPercentage } from '../services/formatters';
@@ -8,7 +9,7 @@ import { Loader2, FileText, MessageSquareWarning, BadgeCheck, BotMessageSquare }
 interface ResultsDisplayProps {
   result: CalculationResult | null;
   isLoading: boolean;
-  onSendToWhatsApp: () => void;
+  formData: CalculatorFormData | null;
 }
 
 const ResultRow: React.FC<{ label: string; userValue: string; marketValue: string }> = ({ label, userValue, marketValue }) => (
@@ -20,7 +21,7 @@ const ResultRow: React.FC<{ label: string; userValue: string; marketValue: strin
 );
 
 
-export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, isLoading, onSendToWhatsApp }) => {
+export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, isLoading, formData }) => {
     if (isLoading) {
         return (
             <Card className="flex justify-center items-center h-96">
@@ -48,9 +49,50 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, isLoadin
         );
     }
 
+    const getWhatsAppUrl = () => {
+        if (!result || !formData) {
+          return '#';
+        }
+        
+        const { fullName, whatsappNumber } = formData;
+        const isAbusive = result.userRate > result.abusiveThresholdRate;
+        const rateDifference = result.userRate - result.marketRate;
+        const totalDifference = result.userTotal - result.marketTotal;
+    
+        let message = `Olá! Meu nome é ${fullName}.\n\n`;
+        message += `Usei a Calculadora de Juros Abusivos e gostaria de uma análise do meu financiamento. Seguem os detalhes que inseri:\n\n`;
+        message += `*📊 COMPARATIVO GERADO PELA FERRAMENTA 📊*\n\n`;
+    
+        message += `🔹 *Meu Contrato*\n`;
+        message += `   - Taxa de Juros: *${formatPercentage(result.userRate)}*\n`;
+        message += `   - Valor da Parcela: *${formatCurrency(result.userInstallment)}*\n`;
+        message += `   - Custo Total: *${formatCurrency(result.userTotal)}*\n\n`;
+    
+        message += `🔹 *Média de Mercado*\n`;
+        message += `   - Taxa de Juros: *${formatPercentage(result.marketRate)}*\n`;
+        message += `   - Valor da Parcela: *${formatCurrency(result.marketInstallment)}*\n`;
+        message += `   - Custo Total: *${formatCurrency(result.marketTotal)}*\n\n`;
+    
+        message += `*💰 RESUMO DA DIFERENÇA 💰*\n`;
+        message += `Minha taxa está *${formatPercentage(rateDifference)}* acima da média.\n`;
+        message += `Posso estar pagando *${formatCurrency(totalDifference)}* a mais no total.\n\n`;
+        
+        if (isAbusive) {
+            message += `A ferramenta indicou *ALERTA DE JUROS ABUSIVOS* para o meu caso (minha taxa de ${formatPercentage(result.userRate)} está acima do teto de ${formatPercentage(result.abusiveThresholdRate)}).\n\n`;
+        }
+        
+        message += `Meu número de contato é: ${whatsappNumber}\n\n`;
+        message += `Aguardo o contato de um especialista para uma análise gratuita. Obrigado!`;
+    
+        const encodedMessage = encodeURIComponent(message);
+        const businessWhatsAppNumber = '4991759509';
+        return `https://wa.me/55${businessWhatsAppNumber}?text=${encodedMessage}`;
+    };
+
     const isAbusive = result.userRate > result.abusiveThresholdRate;
     const rateDifference = Math.abs(result.userRate - result.marketRate);
     const totalDifference = Math.abs(result.userTotal - result.marketTotal);
+    const whatsappUrl = getWhatsAppUrl();
 
     return (
         <Card>
@@ -113,12 +155,14 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, isLoadin
                 </p>
 
                 <Button
-                    onClick={onSendToWhatsApp}
+                    asChild
                     className="w-full bg-brand-green hover:bg-green-800 text-white font-bold py-3 text-lg h-auto transition duration-300 ease-in-out"
                     aria-label="Enviar análise para um especialista via WhatsApp"
                 >
-                    <BotMessageSquare className="h-6 w-6 mr-2" />
-                    Enviar Análise via WhatsApp
+                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                        <BotMessageSquare className="h-6 w-6 mr-2" />
+                        Enviar Análise via WhatsApp
+                    </a>
                 </Button>
             </CardContent>
         </Card>

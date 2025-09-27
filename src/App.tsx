@@ -10,7 +10,6 @@ import type { CalculationResult } from './types';
 import type { CalculatorFormData } from './services/validation';
 import { calculateMonthlyRate, calculateMonthlyPayment } from './services/financial';
 import { getMarketRate } from './services/interestRateData';
-import { formatCurrency, formatPercentage } from './services/formatters';
 
 export default function App(): React.ReactElement {
   const [result, setResult] = useState<CalculationResult | null>(null);
@@ -76,53 +75,6 @@ export default function App(): React.ReactElement {
     }, 500);
   };
 
-  const handleSendToWhatsApp = (): void => {
-    if (!result || !latestFormData) {
-        setError("Não foi possível gerar a mensagem. Tente calcular novamente.");
-        return;
-    }
-    
-    const { fullName, whatsappNumber } = latestFormData;
-
-    // --- WhatsApp Message Logic ---
-    const isAbusive = result.userRate > result.abusiveThresholdRate;
-    const rateDifference = result.userRate - result.marketRate;
-    const totalDifference = result.userTotal - result.marketTotal;
-
-    let message = `Olá! Meu nome é ${fullName}.\n\n`;
-    message += `Usei a Calculadora de Juros Abusivos e gostaria de uma análise do meu financiamento. Seguem os detalhes que inseri:\n\n`;
-    message += `*📊 COMPARATIVO GERADO PELA FERRAMENTA 📊*\n\n`;
-
-    message += `🔹 *Meu Contrato*\n`;
-    message += `   - Taxa de Juros: *${formatPercentage(result.userRate)}*\n`;
-    message += `   - Valor da Parcela: *${formatCurrency(result.userInstallment)}*\n`;
-    message += `   - Custo Total: *${formatCurrency(result.userTotal)}*\n\n`;
-
-    message += `🔹 *Média de Mercado*\n`;
-    message += `   - Taxa de Juros: *${formatPercentage(result.marketRate)}*\n`;
-    message += `   - Valor da Parcela: *${formatCurrency(result.marketInstallment)}*\n`;
-    message += `   - Custo Total: *${formatCurrency(result.marketTotal)}*\n\n`;
-
-    message += `*💰 RESUMO DA DIFERENÇA 💰*\n`;
-    message += `Minha taxa está *${formatPercentage(rateDifference)}* acima da média.\n`;
-    message += `Posso estar pagando *${formatCurrency(totalDifference)}* a mais no total.\n\n`;
-    
-    if (isAbusive) {
-        message += `A ferramenta indicou *ALERTA DE JUROS ABUSIVOS* para o meu caso (minha taxa de ${formatPercentage(result.userRate)} está acima do teto de ${formatPercentage(result.abusiveThresholdRate)}).\n\n`;
-    }
-    
-    message += `Meu número de contato é: ${whatsappNumber}\n\n`;
-    message += `Aguardo o contato de um especialista para uma análise gratuita. Obrigado!`;
-
-
-    const encodedMessage = encodeURIComponent(message);
-    const businessWhatsAppNumber = '4991759509';
-    const whatsappUrl = `https://wa.me/55${businessWhatsAppNumber}?text=${encodedMessage}`;
-    
-    window.open(whatsappUrl, '_blank')?.focus();
-  }
-
-
   return (
     <div className="min-h-screen flex flex-col items-center text-brand-black">
       <main className="w-full max-w-5xl mx-auto p-4 sm:p-6 md:p-8">
@@ -146,7 +98,7 @@ export default function App(): React.ReactElement {
                 </CardContent>
               </Card>
             )}
-            <ResultsDisplay result={result} isLoading={isLoading} onSendToWhatsApp={handleSendToWhatsApp} />
+            <ResultsDisplay result={result} isLoading={isLoading} formData={latestFormData} />
           </div>
         </div>
       </main>
