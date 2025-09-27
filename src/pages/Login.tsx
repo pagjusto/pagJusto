@@ -23,7 +23,18 @@ const Login: React.FC = () => {
             <div className="w-full max-w-md">
                 <Auth
                     supabaseClient={supabase}
-                    appearance={{ theme: ThemeSupa }}
+                    appearance={{ 
+                        theme: ThemeSupa,
+                        variables: {
+                            default: {
+                                colors: {
+                                    inputLabelText: 'white',
+                                    anchorTextColor: 'white',
+                                    anchorTextHoverColor: '#d1d5db',
+                                }
+                            }
+                        }
+                    }}
                     providers={[]}
                     theme="dark"
                     localization={{
