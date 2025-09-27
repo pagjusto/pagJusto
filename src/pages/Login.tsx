@@ -9,7 +9,7 @@ const Login: React.FC = () => {
             <img 
                 src="/logo.png"
                 alt="Pag Justo! Logo" 
-                className="w-48 sm:w-56 mx-auto mb-8"
+                className="w-56 sm:w-64 mx-auto mb-8"
             />
             <div className="w-full max-w-md">
                 <Auth
