@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
+import Settings from '@/pages/Settings';
 import type { Session } from '@supabase/supabase-js';
 
 const App: React.FC = () => {
@@ -42,6 +43,10 @@ const App: React.FC = () => {
       <Route 
         path="/" 
         element={session ? <Home /> : <Navigate to="/login" state={{ from: location }} replace />} 
+      />
+      <Route 
+        path="/settings" 
+        element={session ? <Settings /> : <Navigate to="/login" state={{ from: location }} replace />} 
       />
     </Routes>
   );

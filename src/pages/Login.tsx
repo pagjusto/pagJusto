@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase } from '@/integrations/supabase/client';
 
 const Login: React.FC = () => {
+    const [logoSrc, setLogoSrc] = useState<string>('/logo.png');
+
+    useEffect(() => {
+        const customLogo = localStorage.getItem('customLogo');
+        if (customLogo) {
+            setLogoSrc(customLogo);
+        }
+    }, []);
+
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-brand-green p-4">
             <img 
-                src="/logo.png" 
+                src={logoSrc}
                 alt="Pag Justo! Logo" 
                 className="w-48 sm:w-56 mx-auto mb-8"
             />

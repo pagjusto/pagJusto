@@ -1,16 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { LogOut } from 'lucide-react';
+import { LogOut, Settings as SettingsIcon } from 'lucide-react';
 
 export const Header: React.FC = () => {
+    const [logoSrc, setLogoSrc] = useState<string>('/logo.png');
+
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const customLogo = localStorage.getItem('customLogo');
+            setLogoSrc(customLogo || '/logo.png');
+        };
+
+        handleStorageChange(); // Initial check
+        window.addEventListener('storage', handleStorageChange);
+        
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
+
     const handleLogout = async () => {
         await supabase.auth.signOut();
     };
 
     return (
         <header className="text-center py-8 sm:py-12">
-             <div className="absolute top-4 right-4">
+             <div className="absolute top-4 right-4 flex items-center gap-2">
+                <Button 
+                    variant="ghost" 
+                    asChild
+                    className="text-white hover:bg-white/10 hover:text-white p-2 h-auto"
+                    aria-label="Configurações"
+                >
+                    <Link to="/settings">
+                        <SettingsIcon className="h-5 w-5" />
+                    </Link>
+                </Button>
                 <Button 
                     variant="ghost" 
                     onClick={handleLogout} 
@@ -22,7 +49,7 @@ export const Header: React.FC = () => {
                 </Button>
             </div>
             <img 
-                src="/logo.png" 
+                src={logoSrc}
                 alt="Pag Justo! Logo" 
                 className="w-48 sm:w-56 mx-auto mb-6"
                 aria-label="Pag Justo! Calculadora de Juros"
