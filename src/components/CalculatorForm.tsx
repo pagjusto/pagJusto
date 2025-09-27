@@ -107,6 +107,9 @@ export const CalculatorForm: React.FC<CalculatorFormProps> = ({ onCalculate, isL
                                         <PopoverContent className="w-auto p-0">
                                             <Calendar
                                                 mode="single"
+                                                captionLayout="dropdown-buttons"
+                                                fromYear={2019}
+                                                toYear={new Date().getFullYear()}
                                                 selected={field.value ? new Date(field.value) : undefined}
                                                 onSelect={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
                                                 initialFocus
