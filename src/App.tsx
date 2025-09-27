@@ -6,7 +6,8 @@ import { Footer } from './components/Footer';
 import { IntroSection } from './components/IntroSection';
 import { Card, CardContent } from './components/ui/card';
 import { AlertCircle } from 'lucide-react';
-import type { FormData, CalculationResult } from './types';
+import type { CalculationResult } from './types';
+import type { CalculatorFormData } from './services/validation';
 import { calculateMonthlyRate, calculateMonthlyPayment } from './services/financial';
 import { getMarketRate } from './services/interestRateData';
 import { formatCurrency, formatPercentage } from './services/formatters';
@@ -15,9 +16,9 @@ export default function App(): React.ReactElement {
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [latestFormData, setLatestFormData] = useState<FormData | null>(null);
+  const [latestFormData, setLatestFormData] = useState<CalculatorFormData | null>(null);
 
-  const handleCalculate = (data: FormData): void => {
+  const handleCalculate = (data: CalculatorFormData): void => {
     setIsLoading(true);
     setResult(null);
     setError(null);
@@ -26,25 +27,9 @@ export default function App(): React.ReactElement {
     // Using setTimeout to simulate an async calculation and show loading state
     setTimeout(() => {
       try {
-        const { financingDate, financedAmount, downPayment, installmentAmount, installments, fullName, whatsappNumber } = data;
-
-        if (!financingDate || financedAmount <= 0 || downPayment < 0 || installmentAmount <= 0 || installments <= 0) {
-          throw new Error("Por favor, preencha todos os campos com valores válidos.");
-        }
-        
-        if (!fullName.trim() || !whatsappNumber.trim()) {
-            throw new Error("Por favor, preencha seu nome completo e número de WhatsApp.");
-        }
-        
-        const cleanWhatsAppNumber = whatsappNumber.replace(/\D/g, '');
-        if (cleanWhatsAppNumber.length < 10) { // Basic validation for DDD + number
-            throw new Error("Número de WhatsApp inválido. Forneça o número com DDD.");
-        }
+        const { financingDate, financedAmount, downPayment, installmentAmount, installments } = data;
 
         const principal = financedAmount - downPayment;
-        if (principal <= 0) {
-            throw new Error("O valor financiado deve ser maior que o valor de entrada.");
-        }
         
         if (installmentAmount * installments <= principal) {
           throw new Error("O valor total das parcelas é menor ou igual ao valor financiado. Isso implicaria em juros negativos ou zero, verifique os valores inseridos.");
