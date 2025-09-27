@@ -151,7 +151,7 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, isLoadin
                 </div>
                 
                 <p className="text-center text-gray-600 mt-8 mb-4">
-                    Gostaria de uma análise gratuita e sem compromisso do seu contrato por um de nossos especialistas?
+                    Clique no botão abaixo para enviar a análise para um de nossos especialistas!
                 </p>
 
                 <Button
